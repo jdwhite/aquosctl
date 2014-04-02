@@ -269,30 +269,6 @@ int  argc,
 				sprintf(param, "%-4s", arg);
 				sendcommand("IAVD", param);
 			}
-
-/******* This seems wrong according to the 2005 spec. ******************/
-			else if ((atoi(arg) >= 1 && atoi(arg) <= 7) &&
-			         (strcmp(arg2, "auto") == 0)) { /* video select */
-				sprintf(cmd, "INP%s", arg);
-				sprintf(param, "%-4s", "0");
-
-				sendcommand(cmd, param);
-			}
-			else if ((atoi(arg) >= 1 && atoi(arg) <= 7) &&
-			         (strcmp(arg2, "video") == 0)) { /* video select */
-				sprintf(cmd, "INP%s", arg);
-				sprintf(param, "%-4s", "1");
-
-				sendcommand(cmd, param);
-			}
-			else if ((atoi(arg) >= 1 && atoi(arg) <= 7) &&
-			         (strcmp(arg2, "component") == 0)) { /* video select */
-				sprintf(cmd, "INP%s", arg);
-				sprintf(param, "%-4s", "2");
-
-				sendcommand(cmd, param);
-			}
-/********************************************************************/
 			else {
 				fprintf(stderr,
 					"%s: Invalid parameter(s) for command %s.\n",
