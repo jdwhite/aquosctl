@@ -3,6 +3,11 @@ aquosctl
 
 Sharp Aquos television RS-232 control application.
 
+Supports the Aquos command protocol as defined in the LC-42/46/52D64U 
+operators manual, updated 12/16/05.  This command set does not include 
+commands for IP or 3D enabled televisions.  Those will be added in a 
+future release.
+
     usage: ./aquosctl [ -h | -n | -p {port} | -v ] {command} [arg]
 	    -h	Help
     	-n	Show commands being sent, but don't send them (No-send).
