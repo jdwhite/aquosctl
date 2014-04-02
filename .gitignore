@@ -1,3 +1,4 @@
+
 # Object files
 *.o
 *.ko
@@ -15,6 +16,7 @@
 *.dylib
 
 # Executables
+aquosctl
 *.exe
 *.out
 *.app
