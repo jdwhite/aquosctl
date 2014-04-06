@@ -170,7 +170,7 @@ static struct lookuptab {
 #ifdef NEWER_PROTOCOL
 	{"3d", CMD_3D,
 		"{ off | 2d3d | sbs | tab | 3d2d-sbs | 3d2d-tab | 3d-auto | 2d-auto }",
-		"3D mode."
+		"3D mode selection."
 	},
 #endif
 };
