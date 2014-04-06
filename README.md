@@ -12,6 +12,7 @@ LC-80LE844U/LC-70LE847U/LC-60LE847U/LC-70LE745U/LC-60LE745U operators
 manual, revised 12/17/10.
 
 Usage for default build:
+
     usage: ./aquosctl [ -h | -n | -p {port} | -v ] {command} [arg]
 	    -h	Help
     	-n	Show commands being sent, but don't send them (No-send).
