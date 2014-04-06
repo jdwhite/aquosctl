@@ -3,11 +3,15 @@ aquosctl
 
 Sharp Aquos television RS-232 control application.
 
-Supports the Aquos command protocol as defined in the LC-42/46/52D64U 
-operators manual, updated 12/16/05.  This command set does not include 
-commands for IP or 3D enabled televisions.  Those will be added in a 
-future release.
+The default build supports the Aquos command protocol as defined in the 
+LC-42/46/52D64U operators manual, revised 12/16/05.
 
+'make aquosctl-new' build adds commands for IP and 3D enabled 
+televisions as defined in the 
+LC-80LE844U/LC-70LE847U/LC-60LE847U/LC-70LE745U/LC-60LE745U operators 
+manual, revised 12/17/10.
+
+Usage for default build:
     usage: ./aquosctl [ -h | -n | -p {port} | -v ] {command} [arg]
 	    -h	Help
     	-n	Show commands being sent, but don't send them (No-send).
@@ -78,3 +82,17 @@ future release.
 
     cc         <none>
                Closed Caption toggle.
+
+"new" build adds/modifes the following:
+
+    poenable   { on | on-ip | off }
+               Enable/Disable power on command.
+
+    input      [ tv | 1 - 8 ]
+               Select TV, INPUT1-8; blank to toggle.
+
+    avmode     [standard|movie|game|user|dyn-fixed|dyn|pc|xvycc|standard-3d|movie-3d|game-3d|auto]
+               AV mode selection; blank to toggle.
+
+	3d         { off | 2d3d | sbs | tab | 3d2d-sbs | 3d2d-tab | 3d-auto | 2d-auto }
+               3D mode selection.
