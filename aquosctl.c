@@ -6,6 +6,10 @@
  * RS-232C port specifications, command format, parameter specification,
  * response code format, and command table are referenced from the Sharp 
  * Aquos operation manual for the LC-42/46/52D64U, revision 12/16/05.
+ *
+ * "NEWER_PROTOCOL" data from the Sharp Aquos operation smanual for the 
+ * LC-80LE844U/LC-70LE847U/LC-60LE847U/LC-70LE745U/LC-60LE745U, revsion 
+ * 12/17/10.
  * 
  * Note: Direct Channel (digital) functionality has not been tested and 
  *       formatting of channel numbers may need tweaking.
@@ -45,15 +49,25 @@
 #define CMD_CHUP     21
 #define CMD_CHDN     22
 #define CMD_CC       23
+#define CMD_3D       24
 
-/* Aquos Command Table, 12/16/05 */
+#ifdef NEWER_PROTOCOL
+#define CMD_TABLE_VERSION "12/17/10"
+#else
+#define CMD_TABLE_VERSION "12/16/05"
+#endif
+
 static struct lookuptab {
 	char *cmd; int opcode;
 		char *args;
 		char *desc;
 } cmdtab[] = {
 	{"poenable", CMD_POENABLE,
+#ifdef NEWER_PROTOCOL
+		"{ on | on-ip | off }",
+#else
 		"{ on | off }",
+#endif
 		"Enable/Disable power on command."
 	},
 	{"power", CMD_POWER,
@@ -61,11 +75,20 @@ static struct lookuptab {
 		"Turn TV on/off."
 	},
 	{"input", CMD_INPUT,
+#ifdef NEWER_PROTOCOL
+		"[ tv | 1 - 8 ]",
+		"Select TV, INPUT1-8; blank to toggle."
+#else
 		"[ tv | 1 - 7 ]",
 		"Select TV, INPUT1-7; blank to toggle."
+#endif
 	},
 	{"avmode", CMD_AVMODE,
+#ifdef NEWER_PROTOCOL
+		"[standard|movie|game|user|dyn-fixed|dyn|pc|xvycc|standard-3d|movie-3d|game-3d|auto]",
+#else
 		"[standard|movie|game|user|dyn-fixed|dyn|pc|xvycc]",
+#endif
 		"AV mode selection; blank to toggle."
 	},
 	{"vol",	CMD_VOLUME,
@@ -89,7 +112,11 @@ static struct lookuptab {
 		"Only in PC mode."
 	},
 	{"viewmode", CMD_VIEWMODE,
+#ifdef NEWER_PROTOCOL
 		"{sidebar|sstretch|zoom|stretch|normal|zoom-pc|stretch-pc|dotbydot|full}",
+#else
+		"{sidebar|sstretch|zoom|stretch|normal|zoom-pc|stretch-pc|dotbydot|full|auto|original}",
+#endif
 		"View modes (vary depending on input signal type -- see manual)."
 	},
 	{"mute", CMD_MUTE,
@@ -97,8 +124,12 @@ static struct lookuptab {
 		"Mute on/off; blank to toggle."
 	},
 	{"surround", CMD_SURROUND,
+#ifdef NEWER_PROTOCOL
 		"[ on | off ]",
-		"Surround on/off; blank to toggle."
+#else
+		"[ normal | off | 3d-hall | 3d-movie | 3d-standard | 3d-stadium ]",
+#endif
+		"Surround mode; blank to toggle."
 	},
 	{"audiosel", CMD_AUDIOSEL,
 		"<none>",
@@ -136,6 +167,12 @@ static struct lookuptab {
 		"<none>",
 		"Closed Caption toggle."
 	},
+#ifdef NEWER_PROTOCOL
+	{"3d", CMD_3D,
+		"{ off | 2d3d | sbs | tab | 3d2d-sbs | 3d2d-tab | 3d-auto | 2d-auto }",
+		"3D mode."
+	},
+#endif
 };
 
 int fd;
@@ -219,11 +256,16 @@ int  argc,
 
 		case CMD_POENABLE:
 			if (strcmp(arg, "off") == 0) {
-				sprintf(param, "%-4s", "0"); /* Enable power on cmd */
+				sprintf(param, "%-4s", "0"); /* Disable power on cmd */
 			}
 			else if (strcmp(arg, "on") == 0) {
-				sprintf(param, "%-4s", "1"); /* Disable power on cmd */
+				sprintf(param, "%-4s", "1"); /* Enable power on cmd */
 			}
+#ifdef NEWER_PROTOCOL
+			else if (strcmp(arg, "on-ip") == 0) {
+				sprintf(param, "%-4s", "2"); /* Enable power on cmd */
+			}
+#endif /* NEWER_PROTOCOL */
 			else {
 				fprintf(stderr, 
 					"%s: Invalid parameter \"%s\" for command %s.\n",
@@ -264,7 +306,11 @@ int  argc,
 				sprintf(param, "%-4s", "0");
 				sendcommand("ITVD", param);
 			}
+#ifdef NEWER_PROTOCOL
+			else if ((atoi(arg) >= 1 && atoi(arg) <= 8) &&
+#else
 			else if ((atoi(arg) >= 1 && atoi(arg) <= 7) &&
+#endif
 			         (strcmp(arg2, "") == 0)) { /* input select */
 				sprintf(param, "%-4s", arg);
 				sendcommand("IAVD", param);
@@ -308,6 +354,20 @@ int  argc,
 			else if (strcmp(arg, "xvycc") == 0) {
 				sprintf(param, "%-4s", "8");
 			}
+#ifdef NEWER_PROTOCOL
+			else if (strcmp(arg, "standard-3d") == 0) {
+				sprintf(param, "%-4s", "14");
+			}
+			else if (strcmp(arg, "movie-3d") == 0) {
+				sprintf(param, "%-4s", "15");
+			}
+			else if (strcmp(arg, "game-3d") == 0) {
+				sprintf(param, "%-4s", "16");
+			}
+			else if (strcmp(arg, "auto") == 0) {
+				sprintf(param, "%-4s", "100");
+			}
+#endif
 			else {
 				fprintf(stderr,
 					"%s: Invalid parameter \"%s\" for command %s.\n",
@@ -440,6 +500,14 @@ int  argc,
 			else if (strcmp(arg, "full") == 0) {
 				sprintf(param, "%-4s", "9");
 			}
+#ifdef NEWER_PROTOCOL
+			else if (strcmp(arg, "auto") == 0) {
+				sprintf(param, "%-4s", "10");
+			}
+			else if (strcmp(arg, "original") == 0) {
+				sprintf(param, "%-4s", "11");
+			}
+#endif
 			else {
 				fprintf(stderr,
 					"%s: Invalid parameter \"%s\" for command %s.\n",
@@ -478,12 +546,32 @@ int  argc,
 			if (strcmp(arg, "") == 0) { /* toggle */
 				sprintf(param, "%-4s", "0");
 			}
+#ifdef NEWER_PROTOCOL
+			else if (strcmp(arg, "normal") == 0) {
+				sprintf(param, "%-4s", "1");
+			}
+#else
 			else if (strcmp(arg, "on") == 0) {
 				sprintf(param, "%-4s", "1");
 			}
+#endif
 			else if (strcmp(arg, "off") == 0) {
 				sprintf(param, "%-4s", "2");
 			}
+#ifdef NEWER_PROTOCOL
+			else if (strcmp(arg, "3d-hall") == 0) {
+				sprintf(param, "%-4s", "4");
+			}
+			else if (strcmp(arg, "3d-movie") == 0) {
+				sprintf(param, "%-4s", "5");
+			}
+			else if (strcmp(arg, "3d-standard") == 0) {
+				sprintf(param, "%-4s", "6");
+			}
+			else if (strcmp(arg, "3d-stadium") == 0) {
+				sprintf(param, "%-4s", "7");
+			}
+#endif
 			else {
 				fprintf(stderr,
 					"%s: Invalid parameter \"%s\" for command %s.\n",
@@ -616,6 +704,45 @@ int  argc,
 			sprintf(param, "%-4s", "0"); /* toggle */
 			sendcommand("CLCP", param);
 			break;
+
+#ifdef NEWER_PROTOCOL
+		case CMD_3D:
+			if (strcmp(arg, "off") == 0) {
+				sprintf(param, "%-4s", "0");
+			}
+			else if (strcmp(arg, "2d3d") == 0) {
+				sprintf(param, "%-4s", "1");
+			}
+			else if (strcmp(arg, "sbs") == 0) {
+				sprintf(param, "%-4s", "2");
+			}
+			else if (strcmp(arg, "tab") == 0) {
+				sprintf(param, "%-4s", "3");
+			}
+			else if (strcmp(arg, "3d2d-sbs") == 0) {
+				sprintf(param, "%-4s", "4");
+			}
+			else if (strcmp(arg, "3d2d-tab") == 0) {
+				sprintf(param, "%-4s", "5");
+			}
+			else if (strcmp(arg, "3d-auto") == 0) {
+				sprintf(param, "%-4s", "6");
+			}
+			else if (strcmp(arg, "2d-auto") == 0) {
+				sprintf(param, "%-4s", "7");
+			}
+			else {
+				fprintf(stderr,
+					"%s: Invalid parameter \"%s\" for command %s.\n",
+					progname, arg, oparg
+				);
+
+				return(EXIT_FAILURE);
+			}
+
+			sendcommand("TDCH", param);
+			break;
+#endif
 	}
 
 	close(fd);
@@ -750,8 +877,9 @@ usage(
 {
 	int i;
 	fprintf(stderr,
+			"aquosctl (command protocol revision %s)\n"
 	        "usage: %s [ -h | -n | -p {port} | -v ] {command} [arg]\n",
-	        progname
+			CMD_TABLE_VERSION, progname
 	);
 	fprintf(stderr,
 		"\t-h\tHelp\n"
