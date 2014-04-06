@@ -13,6 +13,7 @@ manual, revised 12/17/10.
 
 Usage for default build:
 
+    aquosctl (command protocol revision 12/16/05)
     usage: ./aquosctl [ -h | -n | -p {port} | -v ] {command} [arg]
 	    -h	Help
     	-n	Show commands being sent, but don't send them (No-send).
