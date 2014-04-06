@@ -98,3 +98,6 @@ Usage for default build:
 
 	3d         { off | 2d3d | sbs | tab | 3d2d-sbs | 3d2d-tab | 3d-auto | 2d-auto }
                3D mode selection.
+
+    button     { button on remote }
+               Simulate remote control button press.

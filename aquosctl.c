@@ -50,6 +50,7 @@
 #define CMD_CHDN     22
 #define CMD_CC       23
 #define CMD_3D       24
+#define CMD_BUTTON   25
 
 #ifdef NEWER_PROTOCOL
 #define CMD_TABLE_VERSION "12/17/10"
@@ -171,6 +172,10 @@ static struct lookuptab {
 	{"3d", CMD_3D,
 		"{ off | 2d3d | sbs | tab | 3d2d-sbs | 3d2d-tab | 3d-auto | 2d-auto }",
 		"3D mode selection."
+	},
+	{"button", CMD_BUTTON,
+		"{ button on remote }",
+		"Simulate remote control button press."
 	},
 #endif
 };
@@ -741,6 +746,199 @@ int  argc,
 			}
 
 			sendcommand("TDCH", param);
+			break;
+
+		case CMD_BUTTON:
+			if (strcmp(arg, "0") == 0) {
+				sprintf(param, "%-4s", "0");
+			}
+			else if (strcmp(arg, "1") == 0) {
+				sprintf(param, "%-4s", "1");
+			}
+			else if (strcmp(arg, "2") == 0) {
+				sprintf(param, "%-4s", "2");
+			}
+			else if (strcmp(arg, "3") == 0) {
+				sprintf(param, "%-4s", "3");
+			}
+			else if (strcmp(arg, "4") == 0) {
+				sprintf(param, "%-4s", "4");
+			}
+			else if (strcmp(arg, "5") == 0) {
+				sprintf(param, "%-4s", "5");
+			}
+			else if (strcmp(arg, "6") == 0) {
+				sprintf(param, "%-4s", "6");
+			}
+			else if (strcmp(arg, "7") == 0) {
+				sprintf(param, "%-4s", "7");
+			}
+			else if (strcmp(arg, "8") == 0) {
+				sprintf(param, "%-4s", "8");
+			}
+			else if (strcmp(arg, "9") == 0) {
+				sprintf(param, "%-4s", "9");
+			}
+			else if (strcmp(arg, ".") == 0) {
+				sprintf(param, "%-4s", "10");
+			}
+			else if (strcmp(arg, "ent") == 0 ||
+			         strcmp(arg, "enter") == 0) {
+				sprintf(param, "%-4s", "11");
+			}
+			else if (strcmp(arg, "power") == 0) {
+				sprintf(param, "%-4s", "12");
+			}
+			else if (strcmp(arg, "display") == 0) {
+				sprintf(param, "%-4s", "13");
+			}
+			else if (strcmp(arg, "power-source") == 0) {
+				sprintf(param, "%-4s", "14");
+			}
+			else if (strcmp(arg, "rew") == 0) { /* << */
+				sprintf(param, "%-4s", "15");
+			}
+			else if (strcmp(arg, "play") == 0) {
+				sprintf(param, "%-4s", "16");
+			}
+			else if (strcmp(arg, "ff") == 0) { /* >> */
+				sprintf(param, "%-4s", "17");
+			}
+			else if (strcmp(arg, "pause") == 0) { /* || */
+				sprintf(param, "%-4s", "18");
+			}
+			else if (strcmp(arg, "prev") == 0) { /* |<< */
+				sprintf(param, "%-4s", "19");
+			}
+			else if (strcmp(arg, "stop") == 0) {
+				sprintf(param, "%-4s", "20");
+			}
+			else if (strcmp(arg, "next") == 0) { /* >>| */
+				sprintf(param, "%-4s", "21");
+			}
+			else if (strcmp(arg, "rec") == 0) {
+				sprintf(param, "%-4s", "22");
+			}
+			else if (strcmp(arg, "option") == 0) {
+				sprintf(param, "%-4s", "23");
+			}
+			else if (strcmp(arg, "sleep") == 0) {
+				sprintf(param, "%-4s", "24");
+			}
+			else if (strcmp(arg, "cc") == 0) {
+				sprintf(param, "%-4s", "27");
+			}
+			else if (strcmp(arg, "avmode") == 0) {
+				sprintf(param, "%-4s", "28");
+			}
+			else if (strcmp(arg, "viewmode") == 0) {
+				sprintf(param, "%-4s", "29");
+			}
+			else if (strcmp(arg, "flashback") == 0) {
+				sprintf(param, "%-4s", "30");
+			}
+			else if (strcmp(arg, "mute") == 0) {
+				sprintf(param, "%-4s", "31");
+			}
+			else if (strcmp(arg, "vol-") == 0 ||
+			         strcmp(arg, "voldn") == 0) {
+				sprintf(param, "%-4s", "32");
+			}
+			else if (strcmp(arg, "vol+") == 0 ||
+			         strcmp(arg, "volup") == 0) {
+				sprintf(param, "%-4s", "33");
+			}
+			else if (strcmp(arg, "chup") == 0) {
+				sprintf(param, "%-4s", "34");
+			}
+			else if (strcmp(arg, "chdn") == 0) {
+				sprintf(param, "%-4s", "35");
+			}
+			else if (strcmp(arg, "input") == 0) {
+				sprintf(param, "%-4s", "36");
+			}
+			else if (strcmp(arg, "menu") == 0) {
+				sprintf(param, "%-4s", "38");
+			}
+			else if (strcmp(arg, "startcenter") == 0) {
+				sprintf(param, "%-4s", "39");
+			}
+			else if (strcmp(arg, "enter") == 0) {
+				sprintf(param, "%-4s", "40");
+			}
+			else if (strcmp(arg, "up") == 0) {
+				sprintf(param, "%-4s", "41");
+			}
+			else if (strcmp(arg, "down") == 0) {
+				sprintf(param, "%-4s", "42");
+			}
+			else if (strcmp(arg, "left") == 0) {
+				sprintf(param, "%-4s", "43");
+			}
+			else if (strcmp(arg, "right") == 0) {
+				sprintf(param, "%-4s", "44");
+			}
+			else if (strcmp(arg, "return") == 0) {
+				sprintf(param, "%-4s", "45");
+			}
+			else if (strcmp(arg, "exit") == 0) {
+				sprintf(param, "%-4s", "46");
+			}
+			else if (strcmp(arg, "fav") == 0 ||
+			         strcmp(arg, "favorite") == 0 ||
+			         strcmp(arg, "favoritech") == 0) {
+				sprintf(param, "%-4s", "47");
+			}
+			else if (strcmp(arg, "3d-surround") == 0) {
+				sprintf(param, "%-4s", "48");
+			}
+			else if (strcmp(arg, "audio") == 0) {
+				sprintf(param, "%-4s", "49");
+			}
+			else if (strcmp(arg, "a") == 0 ||
+			         strcmp(arg, "red") == 0) {
+				sprintf(param, "%-4s", "50");
+			}
+			else if (strcmp(arg, "b") == 0 ||
+			         strcmp(arg, "green") == 0) {
+				sprintf(param, "%-4s", "51");
+			}
+			else if (strcmp(arg, "c") == 0 ||
+			         strcmp(arg, "blue") == 0) {
+				sprintf(param, "%-4s", "52");
+			}
+			else if (strcmp(arg, "d") == 0 ||
+			         strcmp(arg, "yellow") == 0) {
+				sprintf(param, "%-4s", "53");
+			}
+			else if (strcmp(arg, "freeze") == 0) {
+				sprintf(param, "%-4s", "54");
+			}
+			else if (strcmp(arg, "favapp1") == 0) {
+				sprintf(param, "%-4s", "55");
+			}
+			else if (strcmp(arg, "favapp2") == 0) {
+				sprintf(param, "%-4s", "56");
+			}
+			else if (strcmp(arg, "favapp3") == 0) {
+				sprintf(param, "%-4s", "57");
+			}
+			else if (strcmp(arg, "3d") == 0) {
+				sprintf(param, "%-4s", "58");
+			}
+			else if (strcmp(arg, "netflix") == 0) {
+				sprintf(param, "%-4s", "59");
+			}
+			else {
+				fprintf(stderr,
+					"%s: Invalid parameter \"%s\" for command %s.\n",
+					progname, arg, oparg
+				);
+
+				return(EXIT_FAILURE);
+			}
+
+			sendcommand("RCKY", param);
 			break;
 #endif
 	}
