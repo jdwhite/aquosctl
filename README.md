@@ -1,3 +1,7 @@
+# This repo has been archived and moved to [Codeberg](https://codeberg.org/jdwhite/aquosctl).
+
+---
+
 aquosctl
 ========
 
